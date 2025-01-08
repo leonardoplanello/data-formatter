@@ -113,7 +113,7 @@ def criar_interface():
     # Rodapé ou Informações Adicionais (opcional)
     rodape = tk.Label(
         janela,
-        text="© 2025 Seu Nome ou Empresa",
+        text="© 2025 Leonardo Planello",
         font=("Arial", 8),
         fg="grey"
     )

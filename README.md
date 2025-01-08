@@ -19,7 +19,7 @@ Este software converte todos os arquivos de texto de uma pasta selecionada para 
 ## Como usar
 
 1. **Faça o download do código fonte**.
-   - Copie o código para um arquivo chamado `conversor_pasta_json.py`.
+   - Copie o código.
 
 2. **Instale as dependências (se necessário)**.
    - Este programa utiliza apenas bibliotecas padrão do Python. Não é necessário instalar pacotes adicionais.
@@ -29,7 +29,7 @@ Este software converte todos os arquivos de texto de uma pasta selecionada para 
    - Navegue até o local onde o arquivo foi salvo.
    - Execute o comando:
      ```bash
-     python conversor_pasta_json.py
+     py script.py
      ```
 
 4. **Selecione a pasta**.

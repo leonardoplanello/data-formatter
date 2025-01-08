@@ -4,40 +4,53 @@ import json
 import os
 from pathlib import Path
 
-def selecionar_arquivo():
-    caminho_arquivo = filedialog.askopenfilename(
-        title="Selecione o arquivo",
-        filetypes=[("Todos os arquivos", "*.*")]
+def selecionar_pasta():
+    caminho_pasta = filedialog.askdirectory(
+        title="Selecione a pasta"
     )
-    if caminho_arquivo:
+    if caminho_pasta:
         try:
-            conteudo = ler_arquivo_com_codificacoes(caminho_arquivo)
-            if conteudo is None:
-                raise UnicodeDecodeError("Nenhuma codificação suportada foi capaz de ler o arquivo.")
+            dados_json = []
+            arquivos_processados = 0
+            arquivos_ignorados = 0
 
-            dados_json = {
-                "path": caminho_arquivo,
-                "content": conteudo
-            }
+            for raiz, dirs, arquivos in os.walk(caminho_pasta):
+                for arquivo in arquivos:
+                    caminho_arquivo = os.path.join(raiz, arquivo)
+                    conteudo = ler_arquivo_com_codificacoes(caminho_arquivo)
+                    
+                    if conteudo is not None:
+                        dados_json.append({
+                            "path": caminho_arquivo,
+                            "content": conteudo
+                        })
+                        arquivos_processados += 1
+                    else:
+                        arquivos_ignorados += 1
 
-            # Obter o caminho da pasta Documents
-            documentos = Path.home() / "Documents"
-            if not documentos.exists():
-                # Caso a pasta Documents não exista, use o diretório home
-                documentos = Path.home()
+            if dados_json:
+                # Obter o caminho da pasta Documents
+                documentos = Path.home() / "Documents"
+                if not documentos.exists():
+                    # Caso a pasta Documents não exista, use o diretório home
+                    documentos = Path.home()
 
-            # Nome do arquivo JSON
-            nome_arquivo = Path(caminho_arquivo).stem + ".json"
-            caminho_json = documentos / nome_arquivo
+                # Nome do arquivo JSON
+                nome_arquivo = "dados_pasta.json"
+                caminho_json = documentos / nome_arquivo
 
-            # Salvar o JSON na pasta Documents
-            with open(caminho_json, 'w', encoding='utf-8') as json_file:
-                json.dump(dados_json, json_file, indent=4, ensure_ascii=False)
+                # Salvar o JSON na pasta Documents
+                with open(caminho_json, 'w', encoding='utf-8') as json_file:
+                    json.dump(dados_json, json_file, indent=4, ensure_ascii=False)
 
-            messagebox.showinfo("Sucesso", f"Arquivo JSON salvo em:\n{caminho_json}")
+                mensagem = f"Arquivo JSON salvo em:\n{caminho_json}\n\nArquivos processados: {arquivos_processados}"
+                if arquivos_ignorados > 0:
+                    mensagem += f"\nArquivos ignorados (não de texto ou leitura falhou): {arquivos_ignorados}"
+                
+                messagebox.showinfo("Sucesso", mensagem)
+            else:
+                messagebox.showwarning("Nenhum Arquivo", "Nenhum arquivo de texto foi encontrado ou todos os arquivos falharam na leitura.")
 
-        except UnicodeDecodeError as ude:
-            messagebox.showerror("Erro de Decodificação", f"Não foi possível decodificar o arquivo com as codificações tentadas.\nDetalhes: {ude}")
         except Exception as e:
             messagebox.showerror("Erro", f"Ocorreu um erro:\n{e}")
 
@@ -53,6 +66,8 @@ def ler_arquivo_com_codificacoes(caminho_arquivo):
                 return arquivo.read()
         except UnicodeDecodeError:
             continue
+        except Exception:
+            return None
     # Se nenhuma codificação funcionar, tentar ler com 'utf-8' substituindo erros
     try:
         with open(caminho_arquivo, 'r', encoding='utf-8', errors='replace') as arquivo:
@@ -63,7 +78,7 @@ def ler_arquivo_com_codificacoes(caminho_arquivo):
 def criar_interface():
     # Configuração da janela principal
     janela = tk.Tk()
-    janela.title("Conversor de Arquivo para JSON")
+    janela.title("Conversor de Pasta para JSON")
     janela.geometry("500x250")
     janela.resizable(False, False)
 
@@ -74,18 +89,18 @@ def criar_interface():
     # Texto de instrução
     label = tk.Label(
         janela,
-        text="Clique no botão abaixo para selecionar um arquivo e convertê-lo em JSON.",
+        text="Clique no botão abaixo para selecionar uma pasta e convertê-la em JSON.\nTodos os arquivos de texto dentro da pasta serão incluídos.",
         wraplength=480,
         justify="center",
         font=("Arial", 12)
     )
-    label.pack(pady=30)
+    label.pack(pady=40)
 
-    # Botão para selecionar o arquivo
+    # Botão para selecionar a pasta
     botao = tk.Button(
         janela,
-        text="Selecionar Arquivo",
-        command=selecionar_arquivo,
+        text="Selecionar Pasta",
+        command=selecionar_pasta,
         width=20,
         height=2,
         bg="#4CAF50",

@@ -1,3 +1,6 @@
+![image](https://github.com/user-attachments/assets/c49a8c53-dd51-4c35-9d83-2171831a6ea9)
+
+
 # Conversor de Pasta para JSON
 
 Este software converte todos os arquivos de texto de uma pasta selecionada para um arquivo JSON. É ideal para quem deseja organizar ou processar dados de texto de maneira simples.
@@ -37,9 +40,6 @@ Este software converte todos os arquivos de texto de uma pasta selecionada para 
    - O programa salvará o arquivo JSON no diretório **"Documentos"** do seu computador, com o nome `dados_pasta.json`.
    - Uma mensagem será exibida informando o número de arquivos processados e ignorados.
 
-## Captura de Tela
-
-![Captura de Tela](https://via.placeholder.com/500x250.png?text=Interface+do+Conversor+de+Pasta+para+JSON)
 
 ## Licença
 

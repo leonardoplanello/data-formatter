@@ -20,8 +20,10 @@ def selecionar_pasta():
                     conteudo = ler_arquivo_com_codificacoes(caminho_arquivo)
                     
                     if conteudo is not None:
+                        # Converter caminho para usar barras '/'
+                        caminho_posix = Path(caminho_arquivo).as_posix()
                         dados_json.append({
-                            "path": caminho_arquivo,
+                            "path": caminho_posix,
                             "content": conteudo
                         })
                         arquivos_processados += 1
@@ -41,15 +43,22 @@ def selecionar_pasta():
 
                 # Salvar o JSON na pasta Documents
                 with open(caminho_json, 'w', encoding='utf-8') as json_file:
+                    # Utilizar indentação para melhor legibilidade
                     json.dump(dados_json, json_file, indent=4, ensure_ascii=False)
 
-                mensagem = f"Arquivo JSON salvo em:\n{caminho_json}\n\nArquivos processados: {arquivos_processados}"
+                mensagem = (
+                    f"Arquivo JSON salvo em:\n{caminho_json}\n\n"
+                    f"Arquivos processados: {arquivos_processados}"
+                )
                 if arquivos_ignorados > 0:
                     mensagem += f"\nArquivos ignorados (não de texto ou leitura falhou): {arquivos_ignorados}"
                 
                 messagebox.showinfo("Sucesso", mensagem)
             else:
-                messagebox.showwarning("Nenhum Arquivo", "Nenhum arquivo de texto foi encontrado ou todos os arquivos falharam na leitura.")
+                messagebox.showwarning(
+                    "Nenhum Arquivo", 
+                    "Nenhum arquivo de texto foi encontrado ou todos os arquivos falharam na leitura."
+                )
 
         except Exception as e:
             messagebox.showerror("Erro", f"Ocorreu um erro:\n{e}")
@@ -89,7 +98,10 @@ def criar_interface():
     # Texto de instrução
     label = tk.Label(
         janela,
-        text="Clique no botão abaixo para selecionar uma pasta e convertê-la em JSON.\nTodos os arquivos de texto dentro da pasta serão incluídos na íntegra.",
+        text=(
+            "Clique no botão abaixo para selecionar uma pasta e convertê-la em JSON.\n"
+            "Todos os arquivos de texto dentro da pasta serão incluídos na íntegra."
+        ),
         wraplength=580,
         justify="center",
         font=("Arial", 12)

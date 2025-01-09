@@ -79,7 +79,7 @@ def criar_interface():
     # Configuração da janela principal
     janela = tk.Tk()
     janela.title("Conversor de Pasta para JSON")
-    janela.geometry("500x250")
+    janela.geometry("600x300")
     janela.resizable(False, False)
 
     # Ícone (opcional)
@@ -89,12 +89,12 @@ def criar_interface():
     # Texto de instrução
     label = tk.Label(
         janela,
-        text="Clique no botão abaixo para selecionar uma pasta e convertê-la em JSON.\nTodos os arquivos de texto dentro da pasta serão incluídos.",
-        wraplength=480,
+        text="Clique no botão abaixo para selecionar uma pasta e convertê-la em JSON.\nTodos os arquivos de texto dentro da pasta serão incluídos na íntegra.",
+        wraplength=580,
         justify="center",
         font=("Arial", 12)
     )
-    label.pack(pady=40)
+    label.pack(pady=50)
 
     # Botão para selecionar a pasta
     botao = tk.Button(

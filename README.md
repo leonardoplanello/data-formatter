@@ -1,7 +1,6 @@
 ![image](https://github.com/user-attachments/assets/8055d5a0-31de-44c4-a813-2b270d4488dd)
 ![image](https://github.com/user-attachments/assets/7434adc5-08cc-4e0d-8cff-5cf6a5b0542a)
 ![image](https://github.com/user-attachments/assets/5e3a2d57-dc1a-42bc-a0fe-784ebf4bdf48)
-![image](https://github.com/user-attachments/assets/05944995-6e88-4b57-ae26-a89b3fe3095f)
 
 # Folder Converter
 

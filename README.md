@@ -4,7 +4,7 @@
 
 # Folder Converter
 
-**Folder Converter** is a powerful and user-friendly Python application designed to help you convert folder structures and file contents into various formats such as JSON, TXT, and CSV. Whether you need to document your folder structure or extract the contents of your files, Folder Converter offers a seamless and efficient solution with a sleek, hacker-inspired interface.
+**Folder Converter** is a powerful and user-friendly Python application designed to help you convert folder structures and file contents into various formats such as JSON, TXT, and CSV. Whether you need to document your folder structure or extract the contents of your files, Folder Converter offers a seamless and efficient solution.
 
 ---
 

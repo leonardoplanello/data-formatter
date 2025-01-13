@@ -46,7 +46,7 @@ LANG_TEXTS = {
         "file_select": "Selecione como deseja escolher os arquivos/pastas:",
         "choose_folder": "Escolher Pasta Inteira",
         "choose_files": "Selecionar Múltiplos Arquivos",
-        "placeholder_manual": "Ou escreva o diretorio dos arquivos e pastas aqui",
+        "placeholder_manual": "Ou escreva o diretório dos arquivos e pastas aqui",
         "format_select": "Escolha o Formato de Saída:",
         "processing": "Processando... Por favor, aguarde.",
         "logs": "Logs:",
@@ -244,7 +244,7 @@ class FolderConverterApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Folder Converter")
-        self.geometry("700x500")
+        self.geometry("700x600")  # Aumentei a altura para acomodar mais elementos
         self.resizable(False, False)
         self.configure(bg="black")
 
@@ -273,7 +273,7 @@ class FolderConverterApp(tk.Tk):
             self.frame_formato,
             self.frame_logs
         ):
-            f.place(x=0, y=0, width=700, height=500)
+            f.place(x=0, y=0, width=700, height=600)
 
         # Construir telas
         self._montar_frame_idioma()
@@ -293,7 +293,7 @@ class FolderConverterApp(tk.Tk):
     def _criar_botao_voltar(self, parent_frame, comando):
         lbl = tk.Label(
             parent_frame,
-            text="<--",
+            text=LANG_TEXTS[self.idioma_selecionado.get()]["back"],
             bg="black",
             fg="#00FF00",
             font=("Consolas", 16, "bold")
@@ -484,7 +484,7 @@ class FolderConverterApp(tk.Tk):
             self.frame_file_select,
             width=60,
             height=4,
-            bg="#00FF00",       # Verde com menor opacidade simulada
+            bg="#33FF33",       # Verde mais claro para simular 20% de opacidade
             fg="#CCCCCC",
             font=("Consolas", 10),
             borderwidth=2,
@@ -494,21 +494,21 @@ class FolderConverterApp(tk.Tk):
         self.manual_input_box.insert("1.0", placeholder_text)
         self._is_placeholder_active = True
 
-        # Botão OK (aparece somente quando há algo digitado)
-        self.btn_ok_manual = tk.Button(
+        # Botão "Next >>" para processar entrada manual
+        self.btn_next_manual = tk.Button(
             self.frame_file_select,
-            text=LANG_TEXTS[self.idioma_selecionado.get()]["manual_ok"],
+            text="Next >>",
             font=("Consolas", 12, "bold"),
             bg="#00AA00",
             fg="black",
             width=10,
-            command=self._manual_ok_clicked
+            state=tk.DISABLED,  # Inicialmente desativado
+            command=self._manual_next_clicked
         )
-        # Inicialmente invisível
-        self.btn_ok_manual.pack(pady=5)
-        self.btn_ok_manual.pack_forget()
+        self.btn_next_manual.pack(pady=5)
+        self.btn_next_manual.pack_forget()  # Esconde inicialmente
 
-        # Vincula eventos para gerenciar placeholder e exibir/esconder botão OK
+        # Vincula eventos para gerenciar placeholder e exibir/esconder botão "Next >>"
         self.manual_input_box.bind("<FocusIn>", self._on_focus_in)
         self.manual_input_box.bind("<FocusOut>", self._on_focus_out)
         self.manual_input_box.bind("<KeyRelease>", self._on_key_release)
@@ -527,18 +527,18 @@ class FolderConverterApp(tk.Tk):
         self.manual_input_box.insert("1.0", texts["placeholder_manual"])
         self.manual_input_box.config(fg="#CCCCCC")
         self._is_placeholder_active = True
-        # Esconde o botão OK
-        self.btn_ok_manual.pack_forget()
+        # Esconde o botão "Next >>"
+        self.btn_next_manual.pack_forget()
 
     def _choose_entire_folder(self):
-        pasta_escolhida = filedialog.askdirectory(title="Selecione uma pasta inteira")
+        pasta_escolhida = filedialog.askdirectory(title=LANG_TEXTS[self.idioma_selecionado.get()]["choose_folder"])
         if pasta_escolhida:
             self.caminhos_entrada.append(pasta_escolhida)
             # Assim que escolhe, vamos pra próxima tela
             self._ir_para_formato()
 
     def _choose_multiple_files(self):
-        arquivos_escolhidos = filedialog.askopenfilenames(title="Selecione múltiplos arquivos")
+        arquivos_escolhidos = filedialog.askopenfilenames(title=LANG_TEXTS[self.idioma_selecionado.get()]["choose_files"])
         if arquivos_escolhidos:
             for arq in arquivos_escolhidos:
                 self.caminhos_entrada.append(arq)
@@ -560,19 +560,21 @@ class FolderConverterApp(tk.Tk):
             self.manual_input_box.delete("1.0", tk.END)
             self.manual_input_box.insert("1.0", LANG_TEXTS[self.idioma_selecionado.get()]["placeholder_manual"])
             self._is_placeholder_active = True
-            # Esconde o botão OK
-            self.btn_ok_manual.pack_forget()
+            # Esconde o botão "Next >>"
+            self.btn_next_manual.pack_forget()
 
     def _on_key_release(self, event):
         # Verifica se há algo digitado (diferente do placeholder)
         current_text = self.manual_input_box.get("1.0", tk.END).strip()
         if self._is_placeholder_active or not current_text:
-            self.btn_ok_manual.pack_forget()
+            self.btn_next_manual.config(state=tk.DISABLED)
+            self.btn_next_manual.pack_forget()
         else:
-            # Mostra botão OK abaixo da caixa de texto
-            self.btn_ok_manual.pack(pady=5)
+            # Mostra e habilita botão "Next >>"
+            self.btn_next_manual.config(state=tk.NORMAL)
+            self.btn_next_manual.pack(pady=5)
 
-    def _manual_ok_clicked(self):
+    def _manual_next_clicked(self):
         # Coletar dados da caixa
         text_data = self.manual_input_box.get("1.0", tk.END).strip()
         # Se ainda estiver com placeholder, ignorar
@@ -591,7 +593,9 @@ class FolderConverterApp(tk.Tk):
         self.manual_input_box.config(fg="#CCCCCC")
         self.manual_input_box.insert("1.0", LANG_TEXTS[self.idioma_selecionado.get()]["placeholder_manual"])
         self._is_placeholder_active = True
-        self.btn_ok_manual.pack_forget()
+        # Desativa e esconde o botão "Next >>"
+        self.btn_next_manual.config(state=tk.DISABLED)
+        self.btn_next_manual.pack_forget()
 
         # Vai pra próxima tela
         self._ir_para_formato()
@@ -702,7 +706,7 @@ class FolderConverterApp(tk.Tk):
         }
 
         caminho_salvar = filedialog.asksaveasfilename(
-            title="Save As",
+            title=LANG_TEXTS[lang]["format_select"],
             defaultextension=ext,
             initialfile="data",
             filetypes=filetypes_map.get(formato, [("All Files", "*.*")])
@@ -894,6 +898,7 @@ class FolderConverterApp(tk.Tk):
     def _log_line(self, text):
         self.text_logs.insert(tk.END, text + "\n")
         self.text_logs.see(tk.END)
+
 
 ###############################################################################
 # Execução

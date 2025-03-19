@@ -172,6 +172,17 @@ IMAGE_EXTENSIONS = {
 }
 
 ###############################################################################
+# Extensões de mídia (vídeos, áudios, etc)
+###############################################################################
+MEDIA_EXTENSIONS = {
+    ".mp4", ".avi", ".mov", ".mkv", ".wmv", ".flv", ".webm", ".mpeg", ".mpg",  # Vídeos
+    ".mp3", ".wav", ".ogg", ".flac", ".aac", ".wma", ".m4a", # Áudios
+    ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz", # Compressados
+    ".iso", ".dmg", # Imagens de disco
+    ".exe", ".dll", ".msi", ".apk" # Executáveis e instaladores (ignorar por segurança e irrelevância)
+}
+
+###############################################################################
 # Funções de leitura e salvamento
 ###############################################################################
 def ler_arquivo_com_codificacoes(caminho_arquivo):
@@ -832,6 +843,9 @@ class FolderConverterApp(tk.Tk):
                         })
                         arquivos_processados += 1
                         self._log_line(f"[OK - IMAGE] {caminho_posix}")
+                    elif ext_arq in MEDIA_EXTENSIONS:
+                        arquivos_ignorados += 1
+                        self._log_line(f"[IGNORED - MEDIA FILE] {caminho_posix}")
                     else:
                         conteudo = ler_arquivo_com_codificacoes(caminho)
                         if conteudo is not None:
@@ -848,10 +862,21 @@ class FolderConverterApp(tk.Tk):
                 elif os.path.isdir(caminho):
                     # Se for pasta, processar todos arquivos dentro
                     for raiz, dirs, arquivos in os.walk(caminho):
+                        # Ignora pastas node_modules, .next, .git
+                        ignore_folders = ['node_modules', '.next', '.git']
+                        dirs[:] = [d for d in dirs if d not in ignore_folders]
+
                         for arquivo in arquivos:
                             fullpath = os.path.join(raiz, arquivo)
-                            ext_arq = os.path.splitext(arquivo)[1].lower()
                             caminho_posix = Path(fullpath).as_posix()
+                            try:
+                                arquivo.encode('ascii')
+                            except UnicodeEncodeError:
+                                arquivos_ignorados += 1
+                                self._log_line(f"[IGNORED - filename with strange chars] {caminho_posix}")
+                                continue # Ignora este arquivo e vai para o próximo
+
+                            ext_arq = os.path.splitext(arquivo)[1].lower()
 
                             if ext_arq in IMAGE_EXTENSIONS:
                                 dados_coletados.append({
@@ -860,6 +885,9 @@ class FolderConverterApp(tk.Tk):
                                 })
                                 arquivos_processados += 1
                                 self._log_line(f"[OK - IMAGE] {caminho_posix}")
+                            elif ext_arq in MEDIA_EXTENSIONS:
+                                arquivos_ignorados += 1
+                                self._log_line(f"[IGNORED - MEDIA FILE] {caminho_posix}")
                             else:
                                 conteudo = ler_arquivo_com_codificacoes(fullpath)
                                 if conteudo is not None:

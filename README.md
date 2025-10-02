@@ -1,9 +1,9 @@
 ## JSON Formatter — Convert Folders/Files to JSON, TXT, or CSV
 
 Desktop app (Tkinter/Python) to extract either the folder tree or the textual contents of files from a project, and save everything as JSON, TXT, or CSV. Ideal for documenting projects, auditing repositories, and preparing datasets for LLMs (ChatGPT, Claude, etc.).
-<img width="712" height="413" alt="Screenshot 2025-10-02 114520" src="https://github.com/user-attachments/assets/56073802-c1a8-4262-9683-8d7bb5371e30" />
-<img width="717" height="416" alt="Screenshot 2025-10-02 114530" src="https://github.com/user-attachments/assets/a3426505-036a-477c-8ed5-5ef590b089d5" />
 <img width="731" height="426" alt="Screenshot 2025-10-02 114504" src="https://github.com/user-attachments/assets/7ffaf689-cdae-4dbf-a3b8-77ae5e480f44" />
+<img width="717" height="416" alt="Screenshot 2025-10-02 114530" src="https://github.com/user-attachments/assets/a3426505-036a-477c-8ed5-5ef590b089d5" />
+<img width="712" height="413" alt="Screenshot 2025-10-02 114520" src="https://github.com/user-attachments/assets/56073802-c1a8-4262-9683-8d7bb5371e30" />
 
 ---
 

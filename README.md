@@ -51,12 +51,12 @@ Windows (optional): the repo may include `script.exe`. If present, double-click 
 ---
 
 ## How to run
-- With Python:
+- On Windows (recommended):
+  - Go to the Releases page, download the latest `script.exe`, then double-click to run.
+- With Python (alternative):
   ```bash
   python script.py
   ```
-- On Windows via executable (if available):
-  - Double-click `script.exe`.
 
 Note: this is a desktop GUI app; it does not start a server/HTTP port.
 

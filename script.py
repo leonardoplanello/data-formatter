@@ -462,7 +462,7 @@ class FolderConverterApp(tk.Tk):
             fg="#00FF00",
             font=("Consolas", 16, "bold")
         )
-        self.lbl_format_title.pack(pady=60)
+        self.lbl_format_title.pack(pady=10)
 
         frm_format = tk.Frame(self.frame_formato, bg="black")
         frm_format.pack(pady=5)
